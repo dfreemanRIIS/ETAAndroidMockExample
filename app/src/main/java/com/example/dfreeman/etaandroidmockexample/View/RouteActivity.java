@@ -14,28 +14,31 @@ import java.util.ArrayList;
 public class RouteActivity extends AppCompatActivity {
 
     public static final String EXTRA_COMPANY = "company";
-    private int company;
+    private int companyNumber;
     private ArrayList<String> routeNumbers;
     private Controller controller;
-    private String bla = "";
-    private TextView test;
+
+    //Will remove later
+    private TextView testDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
         Intent intent = getIntent();
-        company = intent.getIntExtra(EXTRA_COMPANY, -1);
+        companyNumber = intent.getIntExtra(EXTRA_COMPANY, -1);
         controller = new Controller();
-        test = (TextView) findViewById(R.id.test);
+        testDisplay = (TextView) findViewById(R.id.test);
         new AsyncCaller().execute();
     }
 
     private class AsyncCaller extends AsyncTask<Void, Void, Void> {
+        String jsonString;
+
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                bla = controller.fetchUrl(controller.getRoutesUrl(company));
+                jsonString = controller.fetchUrl(controller.getRoutesUrl(companyNumber));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -46,7 +49,7 @@ public class RouteActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            test.setText(bla);
+            testDisplay.setText(jsonString);
         }
 
     }
