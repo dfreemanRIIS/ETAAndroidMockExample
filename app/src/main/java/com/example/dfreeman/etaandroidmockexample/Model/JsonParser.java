@@ -8,11 +8,9 @@ import java.util.ArrayList;
 
 public class JsonParser {
     public ArrayList<String> parseRoutes(String jsonString) throws JSONException{
-        //Create an array with the jsonString
-        final JSONObject obj = new JSONObject(jsonString);
 
         //Create jsonArray for routeIDs
-        final JSONArray routeID = obj.getJSONArray("routeID");
+        final JSONArray routeID = new JSONArray(jsonString);
 
         //Get number of routes
         final int n = routeID.length();
@@ -23,7 +21,6 @@ public class JsonParser {
             final JSONObject instance = routeID.getJSONObject(i);
             returnArray.add(instance.getString("routeID"));
         }
-
         return returnArray;
     }
 }
