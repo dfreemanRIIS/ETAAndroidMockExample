@@ -16,6 +16,7 @@ public class Controller {
     public ArrayList<String> parseRoutes(String jsonString) throws JSONException {
         JsonParser parser = new JsonParser();
         return parser.parseRoutes(jsonString);
+    }
         
     private String getRoutesUrl(int company){
         UrlStringBuilder urlStringBuilder = new UrlStringBuilder();
