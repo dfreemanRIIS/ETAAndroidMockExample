@@ -18,12 +18,12 @@ public class Controller {
         return parser.parseRoutes(jsonString);
     }
         
-    private String getRoutesUrl(int company){
+    public String getRoutesUrl(int company){
         UrlStringBuilder urlStringBuilder = new UrlStringBuilder();
         return urlStringBuilder.getRoutesUrl(company);
     }
 
-    private String getStopsUrl(int company, String routeId, String direction, String days){
+    public String getStopsUrl(int company, String routeId, String direction, String days){
         UrlStringBuilder urlStringBuilder = new UrlStringBuilder();
         return urlStringBuilder.getStopsUrl(company, routeId, direction, days);
     }
