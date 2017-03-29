@@ -23,8 +23,8 @@ public class Controller {
         return urlStringBuilder.getRoutesUrl(company);
     }
 
-    public String getStopsUrl(int company, String id, String direction, String days){
+    public String getStopsUrl(int company, String routeId, String direction, String days){
         UrlStringBuilder urlStringBuilder = new UrlStringBuilder();
-        return urlStringBuilder.getStopsUrl(company, id, direction, days);
+        return urlStringBuilder.getStopsUrl(company, routeId, direction, days);
     }
 }

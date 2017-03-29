@@ -13,7 +13,7 @@ import com.example.dfreeman.etaandroidmockexample.R;
 public class CompanyActivity extends AppCompatActivity {
 
     private String[] busNames;
-    private ListView busList ;
+    private ListView busList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
