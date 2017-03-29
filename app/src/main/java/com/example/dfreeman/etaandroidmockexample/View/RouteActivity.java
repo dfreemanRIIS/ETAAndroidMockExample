@@ -11,6 +11,7 @@ public class RouteActivity extends AppCompatActivity {
 
     public static final String EXTRA_COMPANY = "company";
     private int company;
+    private String[] routeNumbers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
