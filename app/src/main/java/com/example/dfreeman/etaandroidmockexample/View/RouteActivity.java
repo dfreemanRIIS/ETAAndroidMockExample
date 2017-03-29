@@ -1,5 +1,6 @@
 package com.example.dfreeman.etaandroidmockexample.View;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.dfreeman.etaandroidmockexample.Controller.Controller;
 import com.example.dfreeman.etaandroidmockexample.R;
@@ -26,9 +26,7 @@ public class RouteActivity extends AppCompatActivity {
     private int companyNumber;
     private ArrayList<String> routeNumbers;
     private Controller controller;
-
-    //Will remove later
-    private TextView testDisplay;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +35,9 @@ public class RouteActivity extends AppCompatActivity {
         Intent intent = getIntent();
         companyNumber = intent.getIntExtra(EXTRA_COMPANY, -1);
         controller = new Controller();
-        testDisplay = (TextView) findViewById(R.id.test);
-        new AsyncCaller().execute();
-      
+        context = this;
+
         routeList = (ListView) findViewById(R.id.routes);
-        routeList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, routeNumbers));  //ROUTE NUMBER ARRAYLIST??
 
         routeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -59,6 +55,8 @@ public class RouteActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        new AsyncCaller().execute();
     }
 
     private class AsyncCaller extends AsyncTask<Void, Void, Void> {
@@ -81,10 +79,10 @@ public class RouteActivity extends AppCompatActivity {
 
             try {
                 routeNumbers = controller.parseRoutes(jsonString);
-                testDisplay.setText(routeNumbers.toString());
-            } catch(Exception e) {
-                testDisplay.setText(e.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            routeList.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, routeNumbers));
         }
     }
 }

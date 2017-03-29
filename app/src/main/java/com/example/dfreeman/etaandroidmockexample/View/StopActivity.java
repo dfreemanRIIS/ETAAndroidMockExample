@@ -1,12 +1,13 @@
 package com.example.dfreeman.etaandroidmockexample.View;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.dfreeman.etaandroidmockexample.R;
 
 public class StopActivity extends AppCompatActivity {
-    private int company;
+    private int companyNumber;
     private String routeId;
     private String direction;
     private String days;
@@ -20,5 +21,7 @@ public class StopActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stop);
+        Intent intent = getIntent();
+        companyNumber = intent.getIntExtra(EXTRA_COMPANY, -1);
     }
 }
