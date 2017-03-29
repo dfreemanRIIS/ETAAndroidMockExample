@@ -17,6 +17,11 @@ public class Controller {
         JsonParser parser = new JsonParser();
         return parser.parseRoutes(jsonString);
     }
+
+    public ArrayList<String> getStops(String jsonString) throws JSONException {
+        JsonParser parser = new JsonParser();
+        return parser.getStops(jsonString);
+    }
         
     public String getRoutesUrl(int company){
         UrlStringBuilder urlStringBuilder = new UrlStringBuilder();

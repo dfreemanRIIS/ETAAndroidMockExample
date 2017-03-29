@@ -7,7 +7,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class JsonParser {
-    public ArrayList<String> parseRoutes(String jsonString) throws JSONException{
+
+    public ArrayList<String> parseRoutes(String jsonString) throws JSONException {
 
         //Create jsonArray for routeIDs
         final JSONArray routeID = new JSONArray(jsonString);
@@ -21,6 +22,25 @@ public class JsonParser {
             final JSONObject instance = routeID.getJSONObject(i);
             returnArray.add(instance.getString("routeID"));
         }
+
+        return returnArray;
+    }
+
+    public ArrayList<String> getStops(String jsonString) throws JSONException {
+
+        //Create jsonArray for routeIDs
+        final JSONArray stops = new JSONArray(jsonString);
+
+        //Get number of stops
+        final int n = stops.length();
+
+        //for each route enter it into an array
+        ArrayList<String> returnArray = new ArrayList<String>();
+        for (int i = 0; i < n; ++i) {
+            final JSONObject instance = stops.getJSONObject(i);
+            returnArray.add(instance.getString("stopName"));
+        }
+
         return returnArray;
     }
 }
