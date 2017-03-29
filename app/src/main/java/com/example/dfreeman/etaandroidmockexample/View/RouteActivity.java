@@ -49,8 +49,13 @@ public class RouteActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            testDisplay.setText(jsonString);
-        }
 
+            try {
+                routeNumbers = controller.parseRoutes(jsonString);
+                testDisplay.setText(routeNumbers.toString());
+            } catch(Exception e) {
+                testDisplay.setText(e.toString());
+            }
+        }
     }
 }
