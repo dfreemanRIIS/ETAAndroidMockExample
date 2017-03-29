@@ -51,7 +51,8 @@ public class JsonParser {
         ArrayList<String> returnArray = new ArrayList<String>();
         for (int i = 0; i < n; ++i) {
             final JSONObject instance = routeID.getJSONObject(i);
-            returnArray.add(instance.getString("id"));
+            int temp = instance.getInt("id");
+            returnArray.add(Integer.toString(temp));
         }
         return returnArray.get(index);
     }
