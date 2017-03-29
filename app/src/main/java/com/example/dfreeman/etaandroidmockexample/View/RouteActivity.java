@@ -13,6 +13,8 @@ import android.widget.ListView;
 import com.example.dfreeman.etaandroidmockexample.Controller.Controller;
 import com.example.dfreeman.etaandroidmockexample.R;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 public class RouteActivity extends AppCompatActivity {
@@ -27,6 +29,8 @@ public class RouteActivity extends AppCompatActivity {
     private ArrayList<String> routeNumbers;
     private Controller controller;
     private Context context;
+    private String jsonString;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +47,13 @@ public class RouteActivity extends AppCompatActivity {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                routeId = "1";
-                direction = "northbound";
-                days = "everyday";
+                try {
+                    routeId = controller.getRouteId(jsonString, position);
+                    direction = controller.getDirection(jsonString, position);
+                    days = controller.getDaysActive(jsonString, position);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 Intent intent = new Intent(RouteActivity.this, StopActivity.class);
                 intent.putExtra(StopActivity.EXTRA_COMPANY, companyNumber);
@@ -60,7 +68,6 @@ public class RouteActivity extends AppCompatActivity {
     }
 
     private class AsyncCaller extends AsyncTask<Void, Void, Void> {
-        String jsonString;
 
         @Override
         protected Void doInBackground(Void... params) {

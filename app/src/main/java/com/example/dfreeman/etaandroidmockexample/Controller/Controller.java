@@ -32,4 +32,19 @@ public class Controller {
         UrlStringBuilder urlStringBuilder = new UrlStringBuilder();
         return urlStringBuilder.getStopsUrl(companyNumber, routeId, direction, days);
     }
+
+    public String getDirection(String jsonString, int index) throws JSONException {
+        JsonParser parser = new JsonParser();
+        return parser.getDirection(jsonString, index);
+    }
+
+    public String getRouteId(String jsonString, int index) throws JSONException {
+        JsonParser parser = new JsonParser();
+        return parser.getRouteId(jsonString, index);
+    }
+
+    public String getDaysActive(String jsonString, int index) throws JSONException {
+        JsonParser parser = new JsonParser();
+        return parser.getDaysActive(jsonString, index);
+    }
 }
