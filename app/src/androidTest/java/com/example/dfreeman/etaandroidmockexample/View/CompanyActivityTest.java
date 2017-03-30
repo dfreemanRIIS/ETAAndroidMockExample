@@ -42,18 +42,22 @@ public class CompanyActivityTest {
         appCompatTextView.perform(click());
 
         ViewInteraction appCompatTextView2 = onView(
-                allOf(withId(android.R.id.text1), withText("DDOT_6445"),
+                allOf(withId(android.R.id.text1), withText("DDOT_6444"),
                         childAtPosition(
                                 withId(R.id.routes),
-                                2),
+                                3),
                         isDisplayed()));
         appCompatTextView2.perform(click());
 
+        ViewInteraction toggleButton = onView(
+                allOf(withId(R.id.directionButton), withText("Northbound"), isDisplayed()));
+        toggleButton.perform(click());
+
         ViewInteraction appCompatTextView3 = onView(
-                allOf(withId(android.R.id.text1), withText("M.L. King & Grand River"),
+                allOf(withId(android.R.id.text1), withText("Southfield & Grand River"),
                         childAtPosition(
                                 withId(R.id.stops),
-                                1),
+                                3),
                         isDisplayed()));
         appCompatTextView3.perform(click());
 
