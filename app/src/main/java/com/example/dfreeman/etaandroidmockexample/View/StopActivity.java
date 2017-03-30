@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.example.dfreeman.etaandroidmockexample.Controller.Controller;
 import com.example.dfreeman.etaandroidmockexample.R;
@@ -18,18 +18,20 @@ import java.util.ArrayList;
 public class StopActivity extends AppCompatActivity {
     private int companyNumber;
     private String routeId;
-    private String direction;
+    private String currentDirection;
+    private String direction1;
+    private String direction2;
     private String days;
     private ArrayList<String> stops;
     private ListView stopsList;
     private String jsonString;
     private Controller controller;
     private Context context;
-    private TextView test;
+    private ToggleButton directionButton;
 
     public static final String EXTRA_COMPANY = "company";
     public static final String EXTRA_ROUTEID = "routeid";
-    public static final String EXTRA_DIRECTION = "direction";
+    public static final String EXTRA_DIRECTION = "direction1";
     public static final String EXTRA_DAYS = "days";
 
     @Override
@@ -39,18 +41,56 @@ public class StopActivity extends AppCompatActivity {
         Intent intent = getIntent();
         companyNumber = intent.getIntExtra(EXTRA_COMPANY, -1);
         routeId = intent.getStringExtra(EXTRA_ROUTEID);
-        direction = intent.getStringExtra(EXTRA_DIRECTION);
+        direction1 = intent.getStringExtra(EXTRA_DIRECTION);
         days = intent.getStringExtra(EXTRA_DAYS);
         stopsList = (ListView) findViewById(R.id.stops);
         controller = new Controller();
         context = this;
+        directionButton = (ToggleButton) findViewById(R.id.directionButton);
+
+        switch (direction1.toLowerCase()) {
+            case "northbound":
+                direction1 = "Northbound";
+                direction2 = "Southbound";
+                break;
+            case "southbound":
+                direction1 = "Northbound";
+                direction2 = "Southbound";
+                break;
+            case "eastbound":
+                direction1 = "Eastbound";
+                direction2 = "Westbound";
+                break;
+            case "westbound":
+                direction1 = "Eastbound";
+                direction2 = "Westbound";
+                break;
+            default:
+                break;
+        }
+
+        directionButton.setTextOff(direction1);
+        directionButton.setTextOn(direction2);
+        directionButton.setChecked(false);
 
         //if days has more than one value, grab first value
-        int spaceIndex = days.indexOf(",");
-        if (spaceIndex != -1)
-        {
-            days = days.substring(0, spaceIndex);
+        int commaIndex = days.indexOf(",");
+        if (commaIndex != -1) {
+            days = days.substring(0, commaIndex);
         }
+
+        currentDirection = direction1;
+
+        directionButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    currentDirection = direction2;
+                } else {
+                    currentDirection = direction1;
+                }
+                new AsyncCaller().execute();
+            }
+        });
 
         new AsyncCaller().execute();
     }
@@ -61,7 +101,7 @@ public class StopActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             try {
                 jsonString = controller.fetchUrl(controller.getStopsUrl(companyNumber, routeId,
-                        direction, days));
+                        currentDirection, days));
             } catch (Exception e) {
                 e.printStackTrace();
             }
