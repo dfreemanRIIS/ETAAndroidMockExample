@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -48,15 +47,30 @@ public class StopActivity extends AppCompatActivity {
         controller = new Controller();
         context = this;
         directionButton = (ToggleButton) findViewById(R.id.directionButton);
-        directionButton.setTextOff(direction1);
 
-        if (direction1.equals("Northbound")) {
-            directionButton.setTextOn("Southbound");
-            direction2 = "Southbound";
-        } else {
-            directionButton.setTextOn("Westbound");
-            direction2 = "Westbound";
+        switch (direction1.toLowerCase()) {
+            case "northbound":
+                direction1 = "Northbound";
+                direction2 = "Southbound";
+                break;
+            case "southbound":
+                direction1 = "Northbound";
+                direction2 = "Southbound";
+                break;
+            case "eastbound":
+                direction1 = "Eastbound";
+                direction2 = "Westbound";
+                break;
+            case "westbound":
+                direction1 = "Eastbound";
+                direction2 = "Westbound";
+                break;
+            default:
+                break;
         }
+
+        directionButton.setTextOff(direction1);
+        directionButton.setTextOn(direction2);
         directionButton.setChecked(false);
 
         //if days has more than one value, grab first value
