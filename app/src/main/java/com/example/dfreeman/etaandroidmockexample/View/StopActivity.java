@@ -16,37 +16,53 @@ import com.example.dfreeman.etaandroidmockexample.R;
 import java.util.ArrayList;
 
 public class StopActivity extends AppCompatActivity {
-    private int companyNumber;
+
+    public static final String EXTRA_COMPANY = "company";
+    public static final String EXTRA_ROUTEID = "routeId";
+    public static final String EXTRA_DIRECTION = "direction1";
+    public static final String EXTRA_DAYSACTIVE = "daysActive";
+
     private String routeId;
     private String currentDirection;
     private String direction1;
     private String direction2;
-    private String days;
-    private ArrayList<String> stops;
-    private ListView stopsList;
+    private String daysActive;
     private String jsonString;
-    private Controller controller;
-    private Context context;
-    private ToggleButton directionButton;
 
-    public static final String EXTRA_COMPANY = "company";
-    public static final String EXTRA_ROUTEID = "routeid";
-    public static final String EXTRA_DIRECTION = "direction1";
-    public static final String EXTRA_DAYS = "days";
+    private ArrayList<String> stopsArrayList;
+
+    private ListView stopsListView;
+
+    private int companyNumber;
+
+    private Controller controller;
+
+    private Context context;
+
+    private ToggleButton directionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stop);
+
         Intent intent = getIntent();
         companyNumber = intent.getIntExtra(EXTRA_COMPANY, -1);
         routeId = intent.getStringExtra(EXTRA_ROUTEID);
         direction1 = intent.getStringExtra(EXTRA_DIRECTION);
-        days = intent.getStringExtra(EXTRA_DAYS);
-        stopsList = (ListView) findViewById(R.id.stops);
+        daysActive = intent.getStringExtra(EXTRA_DAYSACTIVE);
+
+        stopsListView = (ListView) findViewById(R.id.stops);
+
         controller = new Controller();
+
         context = this;
-        directionButton = (ToggleButton) findViewById(R.id.directionButton);
+
+        //if daysActive has more than one value, grab first value
+        int commaIndex = daysActive.indexOf(",");
+        if (commaIndex != -1) {
+            daysActive = daysActive.substring(0, commaIndex);
+        }
 
         switch (direction1.toLowerCase()) {
             case "northbound":
@@ -69,18 +85,10 @@ public class StopActivity extends AppCompatActivity {
                 break;
         }
 
+        directionButton = (ToggleButton) findViewById(R.id.directionButton);
         directionButton.setTextOff(direction1);
         directionButton.setTextOn(direction2);
         directionButton.setChecked(false);
-
-        //if days has more than one value, grab first value
-        int commaIndex = days.indexOf(",");
-        if (commaIndex != -1) {
-            days = days.substring(0, commaIndex);
-        }
-
-        currentDirection = direction1;
-
         directionButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -88,37 +96,36 @@ public class StopActivity extends AppCompatActivity {
                 } else {
                     currentDirection = direction1;
                 }
-                new AsyncCaller().execute();
+                new AsyncJsonCaller().execute();
             }
         });
 
-        new AsyncCaller().execute();
+        currentDirection = direction1;
+
+        new AsyncJsonCaller().execute();
     }
 
-    private class AsyncCaller extends AsyncTask<Void, Void, Void> {
-
+    private class AsyncJsonCaller extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             try {
                 jsonString = controller.fetchUrl(controller.getStopsUrl(companyNumber, routeId,
-                        currentDirection, days));
+                        currentDirection, daysActive));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
             try {
-                stops = controller.getStops(jsonString);
+                stopsArrayList = controller.getStops(jsonString);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            stopsList.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, stops));
+            stopsListView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, stopsArrayList));
         }
     }
 }

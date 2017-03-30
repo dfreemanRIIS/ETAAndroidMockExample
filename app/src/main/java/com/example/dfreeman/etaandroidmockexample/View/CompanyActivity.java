@@ -12,20 +12,20 @@ import com.example.dfreeman.etaandroidmockexample.R;
 
 public class CompanyActivity extends AppCompatActivity {
 
-    private String[] busNames;
-    private ListView busList;
+    private String[] busNamesArray;
+
+    private ListView busListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company);
-        busNames = getResources().getStringArray(R.array.busnames);
-        busList = (ListView) findViewById(R.id.busses);
-        busList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, busNames));
-        busList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        busNamesArray = getResources().getStringArray(R.array.busnames);
+        busListView = (ListView) findViewById(R.id.busses);
+        busListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, busNamesArray));
 
+        busListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 Intent intent = new Intent(CompanyActivity.this, RouteActivity.class);
                 intent.putExtra(RouteActivity.EXTRA_COMPANY, position + 1);
                 startActivity(intent);
