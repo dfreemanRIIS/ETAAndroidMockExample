@@ -22,14 +22,19 @@ public class RouteActivity extends AppCompatActivity {
     public static final String EXTRA_COMPANY = "company";
 
     private ListView routeList;
+
     private String routeId;
     private String direction;
-    private String days;
-    private int companyNumber;
-    private ArrayList<String> routeNumbers;
-    private Controller controller;
-    private Context context;
+    private String daysActive;
     private String jsonString;
+
+    private int companyNumber;
+
+    private ArrayList<String> routeNumbersArray;
+
+    private Controller controller;
+
+    private Context context;
 
 
     @Override
@@ -44,22 +49,19 @@ public class RouteActivity extends AppCompatActivity {
         routeList = (ListView) findViewById(R.id.routes);
 
         routeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 try {
                     routeId = controller.getRouteId(jsonString, position);
                     direction = controller.getDirection(jsonString, position);
-                    days = controller.getDaysActive(jsonString, position);
+                    daysActive = controller.getDaysActive(jsonString, position);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 Intent intent = new Intent(RouteActivity.this, StopActivity.class);
                 intent.putExtra(StopActivity.EXTRA_COMPANY, companyNumber);
                 intent.putExtra(StopActivity.EXTRA_ROUTEID, routeId);
                 intent.putExtra(StopActivity.EXTRA_DIRECTION, direction);
-                intent.putExtra(StopActivity.EXTRA_DAYS, days);
+                intent.putExtra(StopActivity.EXTRA_DAYSACTIVE, daysActive);
                 startActivity(intent);
             }
         });
@@ -76,20 +78,18 @@ public class RouteActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
             try {
-                routeNumbers = controller.parseRoutes(jsonString);
+                routeNumbersArray = controller.parseRoutes(jsonString);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            routeList.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, routeNumbers));
+            routeList.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, routeNumbersArray));
         }
     }
 }
